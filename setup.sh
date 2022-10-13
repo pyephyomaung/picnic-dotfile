@@ -8,7 +8,7 @@ sudo add-apt-repository -y ppa:kelleyk/emacs
 sudo apt update
 
 sudo apt remove emacs*
-sudo apt install -y silversearcher-ag emacs28
+sudo apt install -y silversearcher-ag emacs28-nox
 git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
 
 echo '(load-file "/workspace/.emacs.d/init.el")' >> ~/.emacs
@@ -17,8 +17,8 @@ cp /workspace/.emacs.d/*.ttf ~/.local/share/fonts
 fc-cache -f -v
 
 emacs --daemon
-alias ec="emacs-client -c"
+alias ec="emacsclient -c"
 
 # setup blanket
-git clone https://github.picnichealth.com/picnichealth/utilities.git /workspace/utilities
-echo '(load-file "/workspace/utilities/blanket/blanket.el")' >> ~/.emacs
+# git clone https://github.picnichealth.com/picnichealth/utilities.git /workspace/utilities
+# echo '(load-file "/workspace/utilities/blanket/blanket.el")' >> ~/.emacs
