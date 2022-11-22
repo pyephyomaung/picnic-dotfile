@@ -1,0 +1,1 @@
+/home/gitpod/.emacs.d/straight/repos/emacs-corfu-terminal/corfu-terminal.el

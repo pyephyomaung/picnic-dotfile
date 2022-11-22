@@ -1,0 +1,1 @@
+/home/gitpod/.emacs.d/straight/repos/sqlformat/sqlformat.el
