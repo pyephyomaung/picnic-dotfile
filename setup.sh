@@ -11,7 +11,7 @@ cp /workspace/.emacs.d/*.ttf ~/.local/share/fonts
 fc-cache -f -v
 
 cp /home/gitpod/.dotfiles/.emacs /home/gitpod/
-cp /home/gitpod/.dotfiles/.emacs.d /home/gitpod/
+cp -r /home/gitpod/.dotfiles/.emacs.d /home/gitpod/
 
 # setup blanket
 # git clone https://github.picnichealth.com/picnichealth/utilities.git /workspace/utilities
