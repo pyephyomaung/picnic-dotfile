@@ -1,4 +1,4 @@
-;;; eldoc-autoloads.el --- automatically extracted autoloads
+;;; eldoc-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -14,6 +14,20 @@ String to display in mode line when ElDoc Mode is enabled; nil for none.")
 (autoload 'eldoc-mode "eldoc" "\
 Toggle echo area display of Lisp objects at point (ElDoc mode).
 
+This is a minor mode.  If called interactively, toggle the `Eldoc
+mode' mode.  If the prefix argument is positive, enable the mode,
+and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `eldoc-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
 ElDoc mode is a buffer-local minor mode.  When enabled, the echo
 area displays information about a function or variable in the
 text where point is.  If point is on a documented variable, it
@@ -23,35 +37,39 @@ expression point is on.
 
 \(fn &optional ARG)" t nil)
 
-(defvar global-eldoc-mode t "\
+(put 'global-eldoc-mode 'globalized-minor-mode t)
+
+(defcustom global-eldoc-mode t "\
 Non-nil if Global Eldoc mode is enabled.
 See the `global-eldoc-mode' command
 for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
-or call the function `global-eldoc-mode'.")
+or call the function `global-eldoc-mode'." :set #'custom-set-minor-mode :initialize 'custom-initialize-delay :type 'boolean)
 
 (custom-autoload 'global-eldoc-mode "eldoc" nil)
 
 (autoload 'global-eldoc-mode "eldoc" "\
 Toggle Eldoc mode in all buffers.
 With prefix ARG, enable Global Eldoc mode if ARG is positive;
-otherwise, disable it.  If called from Lisp, enable the mode if
-ARG is omitted or nil.
+otherwise, disable it.
 
-Eldoc mode is enabled in all buffers where
-`turn-on-eldoc-mode' would do it.
+If called from Lisp, toggle the mode if ARG is `toggle'.
+Enable the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+Eldoc mode is enabled in all buffers where `turn-on-eldoc-mode' would
+do it.
+
 See `eldoc-mode' for more information on Eldoc mode.
 
 \(fn &optional ARG)" t nil)
 
 (autoload 'turn-on-eldoc-mode "eldoc" "\
 Turn on `eldoc-mode' if the buffer has ElDoc support enabled.
-See `eldoc-documentation-strategy' for more detail.
+See `eldoc-documentation-strategy' for more detail." nil nil)
 
-\(fn)" nil nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "eldoc" '("eldoc")))
+(register-definition-prefixes "eldoc" '("eldoc"))
 
 ;;;***
 

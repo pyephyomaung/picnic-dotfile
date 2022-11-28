@@ -1,4 +1,4 @@
-;;; pythonic-autoloads.el --- automatically extracted autoloads
+;;; pythonic-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -12,11 +12,9 @@ Activate python VIRTUALENV.
 \(fn VIRTUALENV)" t nil)
 
 (autoload 'pythonic-deactivate "pythonic" "\
-Deactivate python virtual environment.
+Deactivate python virtual environment." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "pythonic" '("pythonic-")))
+(register-definition-prefixes "pythonic" '("pythonic-"))
 
 ;;;***
 

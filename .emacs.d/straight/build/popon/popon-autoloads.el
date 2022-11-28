@@ -1,4 +1,4 @@
-;;; popon-autoloads.el --- automatically extracted autoloads
+;;; popon-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -92,14 +92,10 @@ Do nothing if POPON isn't a live popon.  Return nil.
 \(fn POPON)" nil nil)
 
 (autoload 'popon-redisplay "popon" "\
-Redisplay popon overlays.
-
-\(fn)" nil nil)
+Redisplay popon overlays." nil nil)
 
 (autoload 'popon-update "popon" "\
-Update popons if needed.
-
-\(fn)" nil nil)
+Update popons if needed." nil nil)
 
 (autoload 'popon-x-y-at-pos "popon" "\
 Return the (X, Y) coodinate of POINT in selected window as a cons.
@@ -112,11 +108,9 @@ calls to this function.
 \(fn POINT)" nil nil)
 
 (autoload 'popon-kill-all "popon" "\
-Kill all popons.
+Kill all popons." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "popon" '("popon-")))
+(register-definition-prefixes "popon" '("popon-"))
 
 ;;;***
 

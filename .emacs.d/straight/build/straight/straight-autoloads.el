@@ -35,7 +35,9 @@ action, just return it).
 \(fn &optional SOURCES ACTION)" t nil)
 
 (autoload 'straight-visit-package-website "straight" "\
-Interactively select a recipe, and visit the package's website." t nil)
+Visit the package RECIPE's website.
+
+\(fn RECIPE)" t nil)
 
 (autoload 'straight-visit-package "straight" "\
 Open PACKAGE's local repository directory.

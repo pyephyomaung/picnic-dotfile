@@ -1,4 +1,4 @@
-;;; xref-autoloads.el --- automatically extracted autoloads
+;;; xref-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -6,33 +6,22 @@
 ;;;### (autoloads nil "xref" "xref.el" (0 0 0 0))
 ;;; Generated autoloads from xref.el
 
-(autoload 'xref-find-backend "xref" "\
-
-
-\(fn)" nil nil)
+(autoload 'xref-find-backend "xref" nil nil nil)
 
 (define-obsolete-function-alias 'xref-pop-marker-stack #'xref-go-back "29.1")
 
 (autoload 'xref-go-back "xref" "\
 Go back to the previous position in xref history.
-To undo, use \\[xref-go-forward].
-
-\(fn)" t nil)
+To undo, use \\[xref-go-forward]." t nil)
 
 (autoload 'xref-go-forward "xref" "\
-Got to the point where a previous \\[xref-go-back] was invoked.
-
-\(fn)" t nil)
+Got to the point where a previous \\[xref-go-back] was invoked." t nil)
 
 (autoload 'xref-marker-stack-empty-p "xref" "\
-Whether the xref back-history is empty.
-
-\(fn)" nil nil)
+Whether the xref back-history is empty." nil nil)
 
 (autoload 'xref-forward-history-empty-p "xref" "\
-Whether the xref forward-history is empty.
-
-\(fn)" nil nil)
+Whether the xref forward-history is empty." nil nil)
 
 (autoload 'xref-show-xrefs "xref" "\
 Display some Xref values produced by FETCHER using DISPLAY-ACTION.
@@ -131,7 +120,7 @@ to control which program to use when looking for matches.
 
 \(fn REGEXP FILES)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "xref" '("xref-")))
+(register-definition-prefixes "xref" '("xref-"))
 
 ;;;***
 

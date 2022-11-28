@@ -1,4 +1,4 @@
-;;; consult-autoloads.el --- automatically extracted autoloads
+;;; consult-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -39,9 +39,7 @@ See `multi-occur' for the meaning of the arguments BUFS, REGEXP and NLINES.
 Jump to an outline heading, obtained by matching against `outline-regexp'.
 
 This command supports narrowing to a heading level and candidate preview.
-The symbol at point is added to the future history.
-
-\(fn)" t nil)
+The symbol at point is added to the future history." t nil)
 
 (autoload 'consult-mark "consult" "\
 Jump to a marker in MARKERS list (defaults to buffer-local `mark-ring').
@@ -120,9 +118,7 @@ narrowing and the settings `consult-goto-line-numbers' and
 \(fn &optional ARG)" t nil)
 
 (autoload 'consult-recent-file "consult" "\
-Find recent file using `completing-read'.
-
-\(fn)" t nil)
+Find recent file using `completing-read'." t nil)
 
 (autoload 'consult-file-externally "consult" "\
 Open FILE externally using the default application of the system.
@@ -181,16 +177,12 @@ Select pattern and call `apropos'.
 
 The default value of the completion is the symbol at point. As a better
 alternative, you can run `embark-export' from commands like `M-x' and
-`describe-symbol'.
-
-\(fn)" t nil)
+`describe-symbol'." t nil)
 
 (autoload 'consult-complex-command "consult" "\
 Select and evaluate command from the command history.
 
-This command can act as a drop-in replacement for `repeat-complex-command'.
-
-\(fn)" t nil)
+This command can act as a drop-in replacement for `repeat-complex-command'." t nil)
 
 (autoload 'consult-history "consult" "\
 Insert string from HISTORY of current buffer.
@@ -204,16 +196,12 @@ See also `cape-history' from the Cape package.
 Read a search string with completion from the Isearch history.
 
 This replaces the current search string if Isearch is active, and
-starts a new Isearch session otherwise.
-
-\(fn)" t nil)
+starts a new Isearch session otherwise." t nil)
 
 (autoload 'consult-minor-mode-menu "consult" "\
 Enable or disable minor mode.
 
-This is an alternative to `minor-mode-menu-from-indicator'.
-
-\(fn)" t nil)
+This is an alternative to `minor-mode-menu-from-indicator'." t nil)
 
 (autoload 'consult-theme "consult" "\
 Disable current themes and enable THEME from `consult-themes'.
@@ -238,19 +226,13 @@ configuration of the virtual buffer sources.
 (autoload 'consult-project-buffer "consult" "\
 Enhanced `project-switch-to-buffer' command with support for virtual buffers.
 The command may prompt you for a project directory if it is invoked from
-outside a project. See `consult-buffer' for more details.
-
-\(fn)" t nil)
+outside a project. See `consult-buffer' for more details." t nil)
 
 (autoload 'consult-buffer-other-window "consult" "\
-Variant of `consult-buffer' which opens in other window.
-
-\(fn)" t nil)
+Variant of `consult-buffer' which opens in other window." t nil)
 
 (autoload 'consult-buffer-other-frame "consult" "\
-Variant of `consult-buffer' which opens in other frame.
-
-\(fn)" t nil)
+Variant of `consult-buffer' which opens in other frame." t nil)
 
 (autoload 'consult-kmacro "consult" "\
 Run a chosen keyboard macro.
@@ -343,7 +325,7 @@ the asynchronous search.
 
 \(fn &optional INITIAL)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult" '("consult-")))
+(register-definition-prefixes "consult" '("consult-"))
 
 ;;;***
 
@@ -356,11 +338,9 @@ Jump to a compilation error in the current buffer.
 
 This command collects entries from compilation buffers and grep
 buffers related to the current buffer.  The command supports
-preview of the currently selected error.
+preview of the currently selected error." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-compile" '("consult-compile--")))
+(register-definition-prefixes "consult-compile" '("consult-compile--"))
 
 ;;;***
 
@@ -375,7 +355,7 @@ buffers in the current project instead of just the current buffer.
 
 \(fn &optional PROJECT)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-flymake" '("consult-flymake--")))
+(register-definition-prefixes "consult-flymake" '("consult-flymake--"))
 
 ;;;***
 
@@ -383,7 +363,7 @@ buffers in the current project instead of just the current buffer.
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from consult-icomplete.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-icomplete" '("consult-icomplete--refresh")))
+(register-definition-prefixes "consult-icomplete" '("consult-icomplete--refresh"))
 
 ;;;***
 
@@ -397,9 +377,7 @@ The command supports preview and narrowing. See the variable
 `consult-imenu-config', which configures the narrowing.
 The symbol at point is added to the future history.
 
-See also `consult-imenu-multi'.
-
-\(fn)" t nil)
+See also `consult-imenu-multi'." t nil)
 
 (autoload 'consult-imenu-multi "consult-imenu" "\
 Select item from the imenus of all buffers from the same project.
@@ -412,7 +390,7 @@ QUERY can be set to a plist according to `consult--buffer-query'.
 
 \(fn &optional QUERY)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-imenu" '("consult-imenu-")))
+(register-definition-prefixes "consult-imenu" '("consult-imenu-"))
 
 ;;;***
 
@@ -436,7 +414,7 @@ By default, all agenda entries are offered. MATCH is as in
 
 \(fn &optional MATCH)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-org" '("consult-org--")))
+(register-definition-prefixes "consult-org" '("consult-org--"))
 
 ;;;***
 
@@ -490,7 +468,7 @@ kmacro.
 
 \(fn ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-register" '("consult-register-")))
+(register-definition-prefixes "consult-register" '("consult-register-"))
 
 ;;;***
 
@@ -498,7 +476,7 @@ kmacro.
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from consult-selectrum.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-selectrum" '("consult-selectrum--")))
+(register-definition-prefixes "consult-selectrum" '("consult-selectrum--"))
 
 ;;;***
 
@@ -506,7 +484,7 @@ kmacro.
 ;;;;;;  0 0))
 ;;; Generated autoloads from consult-vertico.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-vertico" '("consult-vertico--")))
+(register-definition-prefixes "consult-vertico" '("consult-vertico--"))
 
 ;;;***
 
@@ -522,7 +500,7 @@ FETCHER and ALIST arguments.
 
 \(fn FETCHER &optional ALIST)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "consult-xref" '("consult-xref--")))
+(register-definition-prefixes "consult-xref" '("consult-xref--"))
 
 ;;;***
 

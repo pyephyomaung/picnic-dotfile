@@ -1,4 +1,4 @@
-;;; project-autoloads.el --- automatically extracted autoloads
+;;; project-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -25,7 +25,7 @@ of the project instance object.
 
 \(fn &optional MAYBE-PROMPT DIRECTORY)" nil nil)
 
-(defvar project-prefix-map (let ((map (make-sparse-keymap))) (define-key map "!" 'project-shell-command) (define-key map "&" 'project-async-shell-command) (define-key map "f" 'project-find-file) (define-key map "F" 'project-or-external-find-file) (define-key map "b" 'project-switch-to-buffer) (define-key map "s" 'project-shell) (define-key map "d" 'project-find-dir) (define-key map "D" 'project-dired) (define-key map "v" 'project-vc-dir) (define-key map "c" 'project-compile) (define-key map "e" 'project-eshell) (define-key map "k" 'project-kill-buffers) (define-key map "p" 'project-switch-project) (define-key map "g" 'project-find-regexp) (define-key map "G" 'project-or-external-find-regexp) (define-key map "r" 'project-query-replace-regexp) (define-key map "x" 'project-execute-extended-command) (define-key map "" 'project-list-buffers) map) "\
+(defvar project-prefix-map (let ((map (make-sparse-keymap))) (define-key map "!" 'project-shell-command) (define-key map "&" 'project-async-shell-command) (define-key map "f" 'project-find-file) (define-key map "F" 'project-or-external-find-file) (define-key map "b" 'project-switch-to-buffer) (define-key map "s" 'project-shell) (define-key map "d" 'project-find-dir) (define-key map "D" 'project-dired) (define-key map "v" 'project-vc-dir) (define-key map "c" 'project-compile) (define-key map "e" 'project-eshell) (define-key map "k" 'project-kill-buffers) (define-key map "p" 'project-switch-project) (define-key map "g" 'project-find-regexp) (define-key map "G" 'project-or-external-find-regexp) (define-key map "r" 'project-query-replace-regexp) (define-key map "x" 'project-execute-extended-command) (define-key map "\2" 'project-list-buffers) map) "\
 Keymap for project commands.")
  (define-key ctl-x-map "p" project-prefix-map)
 
@@ -35,9 +35,7 @@ Run project command, displaying resultant buffer in another window.
 The following commands are available:
 
 \\{project-prefix-map}
-\\{project-other-window-map}
-
-\(fn)" t nil)
+\\{project-other-window-map}" t nil)
  (define-key ctl-x-4-map "p" #'project-other-window-command)
 
 (autoload 'project-other-frame-command "project" "\
@@ -46,9 +44,7 @@ Run project command, displaying resultant buffer in another frame.
 The following commands are available:
 
 \\{project-prefix-map}
-\\{project-other-frame-map}
-
-\(fn)" t nil)
+\\{project-other-frame-map}" t nil)
  (define-key ctl-x-5-map "p" #'project-other-frame-command)
 
 (autoload 'project-other-tab-command "project" "\
@@ -56,9 +52,7 @@ Run project command, displaying resultant buffer in a new tab.
 
 The following commands are available:
 
-\\{project-prefix-map}
-
-\(fn)" t nil)
+\\{project-prefix-map}" t nil)
 
 (when (bound-and-true-p tab-prefix-map) (define-key tab-prefix-map "p" #'project-other-tab-command))
 
@@ -105,49 +99,35 @@ for VCS directories listed in `vc-directory-exclusion-list'.
 \(fn &optional INCLUDE-ALL)" t nil)
 
 (autoload 'project-find-dir "project" "\
-Start Dired in a directory inside the current project.
-
-\(fn)" t nil)
+Start Dired in a directory inside the current project." t nil)
 
 (autoload 'project-dired "project" "\
-Start Dired in the current project's root.
-
-\(fn)" t nil)
+Start Dired in the current project's root." t nil)
 
 (autoload 'project-vc-dir "project" "\
-Run VC-Dir in the current project's root.
-
-\(fn)" t nil)
+Run VC-Dir in the current project's root." t nil)
 
 (autoload 'project-shell "project" "\
 Start an inferior shell in the current project's root directory.
 If a buffer already exists for running a shell in the project's root,
 switch to it.  Otherwise, create a new shell buffer.
 With \\[universal-argument] prefix arg, create a new inferior shell buffer even
-if one already exists.
-
-\(fn)" t nil)
+if one already exists." t nil)
 
 (autoload 'project-eshell "project" "\
 Start Eshell in the current project's root directory.
 If a buffer already exists for running Eshell in the project's root,
 switch to it.  Otherwise, create a new Eshell buffer.
 With \\[universal-argument] prefix arg, create a new Eshell buffer even
-if one already exists.
-
-\(fn)" t nil)
+if one already exists." t nil)
 
 (autoload 'project-async-shell-command "project" "\
-Run `async-shell-command' in the current project's root directory.
-
-\(fn)" t nil)
+Run `async-shell-command' in the current project's root directory." t nil)
 
 (function-put 'project-async-shell-command 'interactive-only 'async-shell-command)
 
 (autoload 'project-shell-command "project" "\
-Run `shell-command' in the current project's root directory.
-
-\(fn)" t nil)
+Run `shell-command' in the current project's root directory." t nil)
 
 (function-put 'project-shell-command 'interactive-only 'shell-command)
 
@@ -172,9 +152,7 @@ If you exit the `query-replace', you can later continue the
 \(fn FROM TO)" t nil)
 
 (autoload 'project-compile "project" "\
-Run `compile' in the project root.
-
-\(fn)" t nil)
+Run `compile' in the project root." t nil)
 
 (function-put 'project-compile 'interactive-only 'compile)
 
@@ -251,14 +229,10 @@ the project list.
 \(fn PROJECT-ROOT)" t nil)
 
 (autoload 'project-known-project-roots "project" "\
-Return the list of root directories of all known projects.
-
-\(fn)" nil nil)
+Return the list of root directories of all known projects." nil nil)
 
 (autoload 'project-execute-extended-command "project" "\
-Execute an extended command in project root.
-
-\(fn)" t nil)
+Execute an extended command in project root." t nil)
 
 (function-put 'project-execute-extended-command 'interactive-only 'command-execute)
 
@@ -272,7 +246,7 @@ to directory DIR.
 
 \(fn DIR)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "project" '("project-")))
+(register-definition-prefixes "project" '("project-"))
 
 ;;;***
 

@@ -1,4 +1,4 @@
-;;; flymake-autoloads.el --- automatically extracted autoloads
+;;; flymake-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -57,6 +57,20 @@ region is invalid.  This function saves match data.
 (autoload 'flymake-mode "flymake" "\
 Toggle Flymake mode on or off.
 
+This is a minor mode.  If called interactively, toggle the
+`Flymake mode' mode.  If the prefix argument is positive, enable
+the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `flymake-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
 Flymake is an Emacs minor mode for on-the-fly syntax checking.
 Flymake collects diagnostic information from multiple sources,
 called backends, and visually annotates the buffer with the
@@ -97,16 +111,12 @@ special *Flymake log* buffer.
 \(fn &optional ARG)" t nil)
 
 (autoload 'flymake-mode-on "flymake" "\
-Turn Flymake mode on.
-
-\(fn)" nil nil)
+Turn Flymake mode on." nil nil)
 
 (autoload 'flymake-mode-off "flymake" "\
-Turn Flymake mode off.
+Turn Flymake mode off." nil nil)
 
-\(fn)" nil nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "flymake" '("flymake-")))
+(register-definition-prefixes "flymake" '("flymake-"))
 
 ;;;***
 

@@ -1,4 +1,4 @@
-;;; orderless-autoloads.el --- automatically extracted autoloads
+;;; orderless-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -40,7 +40,7 @@ a value in `ivy-re-builders-alist'.
 
 \(fn STR)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "orderless" '("orderless-")))
+(register-definition-prefixes "orderless" '("orderless-"))
 
 ;;;***
 

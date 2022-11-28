@@ -1,4 +1,4 @@
-;;; corfu-autoloads.el --- automatically extracted autoloads
+;;; corfu-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,23 @@
 (autoload 'corfu-mode "corfu" "\
 Completion Overlay Region FUnction.
 
+This is a minor mode.  If called interactively, toggle the `Corfu
+mode' mode.  If the prefix argument is positive, enable the mode,
+and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `corfu-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
 \(fn &optional ARG)" t nil)
+
+(put 'global-corfu-mode 'globalized-minor-mode t)
 
 (defvar global-corfu-mode nil "\
 Non-nil if Global Corfu mode is enabled.
@@ -24,16 +40,19 @@ or call the function `global-corfu-mode'.")
 (autoload 'global-corfu-mode "corfu" "\
 Toggle Corfu mode in all buffers.
 With prefix ARG, enable Global Corfu mode if ARG is positive;
-otherwise, disable it.  If called from Lisp, enable the mode if
-ARG is omitted or nil.
+otherwise, disable it.
 
-Corfu mode is enabled in all buffers where
-`corfu--on' would do it.
+If called from Lisp, toggle the mode if ARG is `toggle'.
+Enable the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+Corfu mode is enabled in all buffers where `corfu--on' would do it.
+
 See `corfu-mode' for more information on Corfu mode.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "corfu" '("corfu-")))
+(register-definition-prefixes "corfu" '("corfu-"))
 
 ;;;***
 

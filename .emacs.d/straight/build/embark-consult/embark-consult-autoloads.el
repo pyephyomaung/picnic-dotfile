@@ -1,4 +1,4 @@
-;;; embark-consult-autoloads.el --- automatically extracted autoloads
+;;; embark-consult-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -7,7 +7,7 @@
 ;;;;;;  0))
 ;;; Generated autoloads from embark-consult.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "embark-consult" '("embark-consult-")))
+(register-definition-prefixes "embark-consult" '("embark-consult-"))
 
 ;;;***
 

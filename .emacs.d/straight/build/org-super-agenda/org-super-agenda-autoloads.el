@@ -1,4 +1,4 @@
-;;; org-super-agenda-autoloads.el --- automatically extracted autoloads
+;;; org-super-agenda-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -23,7 +23,7 @@ With prefix argument ARG, turn on if positive, otherwise off.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-super-agenda" '("org-super-agenda-")))
+(register-definition-prefixes "org-super-agenda" '("org-super-agenda-"))
 
 ;;;***
 

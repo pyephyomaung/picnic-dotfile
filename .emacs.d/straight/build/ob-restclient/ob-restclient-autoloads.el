@@ -1,4 +1,4 @@
-;;; ob-restclient-autoloads.el --- automatically extracted autoloads
+;;; ob-restclient-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -17,7 +17,7 @@ Return a list of restclient statements assigning the block's variables specified
 
 \(fn PARAMS)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ob-restclient" '("org-babel-")))
+(register-definition-prefixes "ob-restclient" '("org-babel-"))
 
 ;;;***
 

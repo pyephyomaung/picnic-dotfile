@@ -1,4 +1,4 @@
-;;; reformatter-autoloads.el --- automatically extracted autoloads
+;;; reformatter-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -103,7 +103,7 @@ EXIT-CODE-SUCCESS-P
 
 (function-put 'reformatter-define 'lisp-indent-function 'defun)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "reformatter" '("reformatter-")))
+(register-definition-prefixes "reformatter" '("reformatter-"))
 
 ;;;***
 

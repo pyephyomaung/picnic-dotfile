@@ -1,4 +1,4 @@
-;;; graphql-mode-autoloads.el --- automatically extracted autoloads
+;;; graphql-mode-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -15,7 +15,7 @@ A major mode to edit GraphQL schemas.
 
 (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "graphql-mode" '("graphql-")))
+(register-definition-prefixes "graphql-mode" '("graphql-"))
 
 ;;;***
 

@@ -1,4 +1,4 @@
-;;; forge-autoloads.el --- automatically extracted autoloads
+;;; forge-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -16,7 +16,7 @@ is loaded, then `magit-mode-map' ends up being modified anyway.")
 
 (with-eval-after-load 'magit-mode (when forge-add-default-bindings (define-key magit-mode-map "'" #'forge-dispatch) (define-key magit-mode-map "N" #'forge-dispatch)))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge" '("forge-")))
+(register-definition-prefixes "forge" '("forge-"))
 
 ;;;***
 
@@ -24,7 +24,7 @@ is loaded, then `magit-mode-map' ends up being modified anyway.")
 ;;;;;;  0 0))
 ;;; Generated autoloads from forge-bitbucket.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-bitbucket" '("forge-bitbucket-repository")))
+(register-definition-prefixes "forge-bitbucket" '("forge-bitbucket-repository"))
 
 ;;;***
 
@@ -46,9 +46,7 @@ If pulling is too slow, then also consider setting the Git variable
 \(fn &optional REPO UNTIL)" t nil)
 
 (autoload 'forge-pull-notifications "forge-commands" "\
-Fetch notifications for all repositories from the current forge.
-
-\(fn)" t nil)
+Fetch notifications for all repositories from the current forge." t nil)
 
 (autoload 'forge-pull-topic "forge-commands" "\
 Pull the API data for the current topic.
@@ -59,9 +57,7 @@ TOPIC to pull instead.
 
 (autoload 'forge-browse-dwim "forge-commands" "\
 Visit a topic, branch or commit using a browser.
-Prefer a topic over a branch and that over a commit.
-
-\(fn)" t nil)
+Prefer a topic over a branch and that over a commit." t nil)
 
 (autoload 'forge-browse-commit "forge-commands" "\
 Visit the url corresponding to REV using a browser.
@@ -69,9 +65,7 @@ Visit the url corresponding to REV using a browser.
 \(fn REV)" t nil)
 
 (autoload 'forge-copy-url-at-point-as-kill "forge-commands" "\
-Copy the url of the thing at point.
-
-\(fn)" t nil)
+Copy the url of the thing at point." t nil)
 
 (autoload 'forge-browse-branch "forge-commands" "\
 Visit the url corresponding BRANCH using a browser.
@@ -89,14 +83,10 @@ View the current repository in a separate buffer.
 \(fn REPO)" t nil)
 
 (autoload 'forge-browse-topic "forge-commands" "\
-Visit the current topic using a browser.
-
-\(fn)" t nil)
+Visit the current topic using a browser." t nil)
 
 (autoload 'forge-browse-pullreqs "forge-commands" "\
-Visit the pull-requests of the current repository using a browser.
-
-\(fn)" t nil)
+Visit the pull-requests of the current repository using a browser." t nil)
 
 (autoload 'forge-browse-pullreq "forge-commands" "\
 Visit the url corresponding to PULLREQ using a browser.
@@ -104,9 +94,7 @@ Visit the url corresponding to PULLREQ using a browser.
 \(fn PULLREQ)" t nil)
 
 (autoload 'forge-browse-issues "forge-commands" "\
-Visit the issues of the current repository using a browser.
-
-\(fn)" t nil)
+Visit the issues of the current repository using a browser." t nil)
 
 (autoload 'forge-browse-issue "forge-commands" "\
 Visit the current issue using a browser.
@@ -116,9 +104,7 @@ read an ISSUE to visit.
 \(fn ISSUE)" t nil)
 
 (autoload 'forge-browse-post "forge-commands" "\
-Visit the current post using a browser.
-
-\(fn)" t nil)
+Visit the current post using a browser." t nil)
 
 (autoload 'forge-visit-topic "forge-commands" "\
 View the current topic in a separate buffer.
@@ -178,17 +164,13 @@ is added anyway.  Currently this only supports Github and Gitlab.
 \(fn FORK REMOTE)" t nil)
 
 (autoload 'forge-list-notifications "forge-commands" "\
-List notifications.
-
-\(fn)" t nil)
+List notifications." t nil)
 
 (autoload 'forge-add-pullreq-refspec "forge-commands" "\
 Configure Git to fetch all pull-requests.
 This is done by adding \"+refs/pull/*/head:refs/pullreqs/*\"
 to the value of `remote.REMOTE.fetch', where REMOTE is the
-upstream remote.  Also fetch from REMOTE.
-
-\(fn)" t nil)
+upstream remote.  Also fetch from REMOTE." t nil)
 
 (autoload 'forge-add-repository "forge-commands" "\
 Add a repository to the database.
@@ -243,60 +225,58 @@ you to manually clean up the local database.
 Move the current database file to the trash.
 This is useful after the database scheme has changed, which will
 happen a few times while the forge functionality is still under
-heavy development.
+heavy development." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-commands" '("forge-")))
+(register-definition-prefixes "forge-commands" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-core" "forge-core.el" (0 0 0 0))
 ;;; Generated autoloads from forge-core.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-core" '("forge-")))
+(register-definition-prefixes "forge-core" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-db" "forge-db.el" (0 0 0 0))
 ;;; Generated autoloads from forge-db.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-db" '("forge-")))
+(register-definition-prefixes "forge-db" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-gitea" "forge-gitea.el" (0 0 0 0))
 ;;; Generated autoloads from forge-gitea.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-gitea" '("forge-gitea-repository")))
+(register-definition-prefixes "forge-gitea" '("forge-gitea-repository"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-github" "forge-github.el" (0 0 0 0))
 ;;; Generated autoloads from forge-github.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-github" '("forge-")))
+(register-definition-prefixes "forge-github" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-gitlab" "forge-gitlab.el" (0 0 0 0))
 ;;; Generated autoloads from forge-gitlab.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-gitlab" '("forge-gitlab-repository")))
+(register-definition-prefixes "forge-gitlab" '("forge-gitlab-repository"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-gogs" "forge-gogs.el" (0 0 0 0))
 ;;; Generated autoloads from forge-gogs.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-gogs" '("forge-gogs-repository")))
+(register-definition-prefixes "forge-gogs" '("forge-gogs-repository"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-issue" "forge-issue.el" (0 0 0 0))
 ;;; Generated autoloads from forge-issue.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-issue" '("forge-")))
+(register-definition-prefixes "forge-issue" '("forge-"))
 
 ;;;***
 
@@ -329,9 +309,7 @@ List them in a separate buffer.
 List open issues from all your Github repositories.
 Options `forge-owned-accounts' and `forge-owned-ignored'
 controls which repositories are considered to be owned by you.
-Only Github is supported for now.
-
-\(fn)" t nil)
+Only Github is supported for now." t nil)
 
 (autoload 'forge-list-pullreqs "forge-list" "\
 List pull-requests of the current repository in a separate buffer.
@@ -360,9 +338,7 @@ List them in a separate buffer.
 List open pull-requests from all your Github repositories.
 Options `forge-owned-accounts' and `forge-owned-ignored'
 controls which repositories are considered to be owned by you.
-Only Github is supported for now.
-
-\(fn)" t nil)
+Only Github is supported for now." t nil)
 
 (autoload 'forge-list-authored-pullreqs "forge-list" "\
 List open pull-requests of the current repository that are authored by you.
@@ -378,69 +354,65 @@ List them in a separate buffer.
 
 (autoload 'forge-list-repositories "forge-list" "\
 List known repositories in a separate buffer.
-Here \"known\" means that an entry exists in the local database.
-
-\(fn)" t nil)
+Here \"known\" means that an entry exists in the local database." t nil)
 
 (autoload 'forge-list-owned-repositories "forge-list" "\
 List your own known repositories in a separate buffer.
 Here \"known\" means that an entry exists in the local database
 and options `forge-owned-accounts' and `forge-owned-ignored'
 controls which repositories are considered to be owned by you.
-Only Github is supported for now.
+Only Github is supported for now." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-list" '("forge-")))
+(register-definition-prefixes "forge-list" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-notify" "forge-notify.el" (0 0 0 0))
 ;;; Generated autoloads from forge-notify.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-notify" '("forge-")))
+(register-definition-prefixes "forge-notify" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-post" "forge-post.el" (0 0 0 0))
 ;;; Generated autoloads from forge-post.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-post" '("forge-")))
+(register-definition-prefixes "forge-post" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-pullreq" "forge-pullreq.el" (0 0 0 0))
 ;;; Generated autoloads from forge-pullreq.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-pullreq" '("forge-")))
+(register-definition-prefixes "forge-pullreq" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-repo" "forge-repo.el" (0 0 0 0))
 ;;; Generated autoloads from forge-repo.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-repo" '("forge-")))
+(register-definition-prefixes "forge-repo" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-revnote" "forge-revnote.el" (0 0 0 0))
 ;;; Generated autoloads from forge-revnote.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-revnote" '("forge-revnote")))
+(register-definition-prefixes "forge-revnote" '("forge-revnote"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-semi" "forge-semi.el" (0 0 0 0))
 ;;; Generated autoloads from forge-semi.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-semi" '("forge-")))
+(register-definition-prefixes "forge-semi" '("forge-"))
 
 ;;;***
 
 ;;;### (autoloads nil "forge-topic" "forge-topic.el" (0 0 0 0))
 ;;; Generated autoloads from forge-topic.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "forge-topic" '("forge-")))
+(register-definition-prefixes "forge-topic" '("forge-"))
 
 ;;;***
 

@@ -1,4 +1,4 @@
-;;; embark-autoloads.el --- automatically extracted autoloads
+;;; embark-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -43,9 +43,7 @@ or an overlay.  These are not widely used in Emacs, and when they
 are used can be somewhat hard to discover.  Examples of locations
 that have such a keymap are links and images in `eww' buffers,
 attachment links in `gnus' article buffers, and the 'Stash' line
-in a `vc-dir' buffer.
-
-\(fn)" t nil)
+in a `vc-dir' buffer." t nil)
 
 (autoload 'embark-prefix-help-command "embark" "\
 Prompt for and run a command bound in the prefix used for this command.
@@ -54,9 +52,7 @@ key sequence that ran this command.  This function is intended to
 be used as a value for `prefix-help-command'.
 
 In addition to using completion to select a command, you can also
-type @ and the key binding (without the prefix).
-
-\(fn)" t nil)
+type @ and the key binding (without the prefix)." t nil)
 
 (autoload 'embark-act "embark" "\
 Prompt the user for an action and perform it.
@@ -154,17 +150,13 @@ just restarts the completion session, that is, the command that
 opened the minibuffer is run again and the minibuffer contents
 restored.  You can then interact normally with the command,
 perhaps editing the minibuffer contents, and, if you wish, you
-can rerun `embark-collect' to get an updated buffer.
-
-\(fn)" t nil)
+can rerun `embark-collect' to get an updated buffer." t nil)
 
 (autoload 'embark-live "embark" "\
 Create a live-updating Embark Collect buffer.
 
 To control the display, add an entry to `display-buffer-alist'
-with key \"Embark Live\".
-
-\(fn)" t nil)
+with key \"Embark Live\"." t nil)
 
 (autoload 'embark-export "embark" "\
 Create a type-specific buffer to manage current candidates.
@@ -178,11 +170,16 @@ restarts the completion session, that is, the command that opened
 the minibuffer is run again and the minibuffer contents restored.
 You can then interact normally with the command, perhaps editing
 the minibuffer contents, and, if you wish, you can rerun
-`embark-export' to get an updated buffer.
+`embark-export' to get an updated buffer." t nil)
 
-\(fn)" t nil)
+(register-definition-prefixes "embark" '("embark-"))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "embark" '("embark-")))
+;;;***
+
+;;;### (autoloads nil "embark-org" "embark-org.el" (0 0 0 0))
+;;; Generated autoloads from embark-org.el
+
+(register-definition-prefixes "embark-org" '("embark-org-"))
 
 ;;;***
 

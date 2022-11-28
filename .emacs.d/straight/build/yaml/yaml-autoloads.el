@@ -1,4 +1,4 @@
-;;; yaml-autoloads.el --- automatically extracted autoloads
+;;; yaml-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -6,7 +6,7 @@
 ;;;### (autoloads nil "yaml" "yaml.el" (0 0 0 0))
 ;;; Generated autoloads from yaml.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "yaml" '("yaml-")))
+(register-definition-prefixes "yaml" '("yaml-"))
 
 ;;;***
 

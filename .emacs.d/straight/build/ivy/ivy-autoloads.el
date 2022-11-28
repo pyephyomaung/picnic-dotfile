@@ -1,4 +1,4 @@
-;;; ivy-autoloads.el --- automatically extracted autoloads
+;;; ivy-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -6,7 +6,7 @@
 ;;;### (autoloads nil "colir" "colir.el" (0 0 0 0))
 ;;; Generated autoloads from colir.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "colir" '("colir-")))
+(register-definition-prefixes "colir" '("colir-"))
 
 ;;;***
 
@@ -106,7 +106,7 @@ INHERIT-INPUT-METHOD is currently ignored.
 \(fn PROMPT COLLECTION &optional PREDICATE REQUIRE-MATCH INITIAL-INPUT HISTORY DEF INHERIT-INPUT-METHOD)" nil nil)
 
 (defvar ivy-mode nil "\
-Non-nil if Ivy mode is enabled.
+Non-nil if ivy mode is enabled.
 See the `ivy-mode' command
 for a description of this minor mode.
 Setting this variable directly does not take effect;
@@ -130,28 +130,22 @@ Minibuffer bindings:
 \(fn &optional ARG)" t nil)
 
 (autoload 'ivy-switch-buffer "ivy" "\
-Switch to another buffer.
-
-\(fn)" t nil)
+Switch to another buffer." t nil)
 
 (autoload 'ivy-switch-view "ivy" "\
-Switch to one of the window views stored by `ivy-push-view'.
-
-\(fn)" t nil)
+Switch to one of the window views stored by `ivy-push-view'." t nil)
 
 (autoload 'ivy-switch-buffer-other-window "ivy" "\
-Switch to another buffer in another window.
+Switch to another buffer in another window." t nil)
 
-\(fn)" t nil)
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy" '("ivy-" "with-ivy-window")))
+(register-definition-prefixes "ivy" '("ivy-" "with-ivy-window"))
 
 ;;;***
 
 ;;;### (autoloads nil "ivy-overlay" "ivy-overlay.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-overlay.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy-overlay" '("ivy-")))
+(register-definition-prefixes "ivy-overlay" '("ivy-"))
 
 ;;;***
 
