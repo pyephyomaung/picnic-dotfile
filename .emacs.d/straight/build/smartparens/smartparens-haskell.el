@@ -1,1 +1,0 @@
-/home/gitpod/.emacs.d/straight/repos/smartparens/smartparens-haskell.el

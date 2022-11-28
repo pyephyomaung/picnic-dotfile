@@ -1,1 +1,0 @@
-/home/gitpod/.emacs.d/straight/repos/ivy-yasnippet/ivy-yasnippet.el

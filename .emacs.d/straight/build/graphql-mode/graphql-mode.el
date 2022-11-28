@@ -1,1 +1,0 @@
-/home/gitpod/.emacs.d/straight/repos/graphql-mode/graphql-mode.el

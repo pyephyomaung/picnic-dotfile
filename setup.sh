@@ -5,13 +5,17 @@ brew install emacs the_silver_searcher
 # setup lsp dependencies
 npm i -g typescript typescript-language-server
 
+# emacs
 git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
 mkdir -p ~/.local/share/fonts
 cp /workspace/.emacs.d/*.ttf ~/.local/share/fonts
 fc-cache -f -v
 
-cp /home/gitpod/.dotfiles/.emacs /home/gitpod/
-cp -r /home/gitpod/.dotfiles/.emacs.d /home/gitpod/
+ln -s /home/gitpod/.dotfiles/.emacs /home/gitpod/.emacs
+
+mkdir -p /workspace/.emacs.d
+ln -s /workspace/.emacs.d /home/gitpod/.emacs.d
+
 
 # setup blanket
 # git clone https://github.picnichealth.com/picnichealth/utilities.git /workspace/utilities
