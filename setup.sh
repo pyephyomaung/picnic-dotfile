@@ -1,6 +1,7 @@
 #!/bin/bash
 
-brew install emacs the_silver_searcher
+brew install emacs the_silver_searcher cmake gcc@5
+sudo apt install -y libvterm-dev
 
 # setup lsp dependencies
 npm i -g typescript typescript-language-server
@@ -15,8 +16,3 @@ ln -s /home/gitpod/.dotfiles/.emacs /home/gitpod/.emacs
 
 mkdir -p /workspace/.emacs.d
 ln -s /workspace/.emacs.d /home/gitpod/.emacs.d
-
-
-# setup blanket
-# git clone https://github.picnichealth.com/picnichealth/utilities.git /workspace/utilities
-# echo '(load-file "/workspace/utilities/blanket/blanket.el")' >> ~/.emacs
