@@ -1,0 +1,194 @@
+* List databases                                                        :src:
+  #+NAME: list-db
+  #+BEGIN_SRC sql
+    SELECT datname FROM pg_database
+    WHERE datistemplate = false;
+  #+END_SRC
+* List columns                                                          :src:
+  #+NAME: list-columns
+  #+BEGIN_SRC sql
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = '${1:TABLE_NAME}';
+  #+END_SRC
+* List tables                                                           :src:
+  #+NAME: list-tables
+  #+BEGIN_SRC sql
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = '${1:SCHEMA}'
+    ORDER BY table_name;
+  #+END_SRC
+* List enums                                                            :src:
+  #+NAME: list-enums
+  #+BEGIN_SRC sql
+  SELECT unnest(enum_range(NULL::${1:ENUM_NAME}))
+  #+END_SRC
+
+  Example:
+  #+NAME: list-enums-example
+  #+begin_src sql
+  SELECT unnest(enum_range(NULL::enum_tasks_task_type))
+  #+end_src
+* List pk and fk constraints                                            :src:
+  #+NAME: list-constraints
+  #+BEGIN_SRC sql
+    SELECT
+      conrelid::regclass AS table_from,
+      conname,
+      pg_get_constraintdef(c.oid)
+    FROM   pg_constraint c
+    JOIN   pg_namespace n ON n.oid = c.connamespace
+    WHERE  contype IN ('f', 'p ')
+    AND    n.nspname = '${1:SCHEMA}'
+    AND    conrelid::regclass::text = '${2:TABLE_NAME}'
+    ORDER  BY conrelid::regclass::text, contype DESC;
+  #+END_SRC
+* List indexes                                                          :src:
+  #+NAME: list-indexes
+  #+BEGIN_SRC sql
+     SELECT
+       i.relname as indname,
+       i.relowner as indowner,
+       idx.indrelid::regclass,
+       am.amname as indam,
+       idx.indkey,
+       ARRAY(
+         SELECT pg_get_indexdef(idx.indexrelid, k + 1, true)
+         FROM generate_subscripts(idx.indkey, 1) as k
+         ORDER BY k
+       ) as indkey_names,
+      idx.indexprs IS NOT NULL as indexprs,
+      idx.indpred IS NOT NULL as indpred,
+      idx.indisvalid as is_valid
+    FROM   pg_index as idx
+    JOIN   pg_class as i
+    ON     i.oid = idx.indexrelid
+    JOIN   pg_am as am
+    ON     i.relam = am.oid
+    WHERE  idx.indrelid::regclass::text = '${1:TABLE_NAME}';
+  #+END_SRC
+* List inheritences                                                     :src:
+  #+NAME: list-inheritences
+  #+BEGIN_SRC sql
+    SELECT
+     p.relname AS parent,
+     c.relname AS child
+    FROM pg_inherits
+    JOIN pg_class AS c ON (inhrelid=c.oid)
+    JOIN pg_class as p ON (inhparent=p.oid)
+    WHERE p.relname = '${1:PARENT_TABLE_NAME}';
+  #+END_SRC
+
+  Example:
+  #+NAME: list-inheritences-example
+  #+BEGIN_SRC sql
+    SELECT
+     p.relname AS parent,
+     c.relname AS child
+    FROM pg_inherits
+    JOIN pg_class AS c ON (inhrelid=c.oid)
+    JOIN pg_class as p ON (inhparent=p.oid)
+    WHERE p.relname = 'concepts';;
+  #+END_SRC
+* List triggers                                                         :src:
+  #+begin_src sql
+    SELECT * FROM information_schema.triggers
+  #+end_src
+* List pg_stat_activity                                                 :src:
+  #+begin_src sql
+    SELECT
+      backend_type,
+      pid,
+      NOW() - query_start,
+      query
+    FROM pg_stat_activity
+    WHERE state = 'active'
+    ORDER BY query_start;
+  #+end_src
+* List sequences                                                        :src:
+  #+NAME: list-sequences
+  #+begin_src sql
+    SELECT c.relname
+    FROM pg_class c
+    WHERE c.relkind = 'S';
+  #+end_src
+* List user defined functions and definitions                           :src:
+  #+name: list-user-defined-functions-and-definitions
+  #+begin_src sql
+    SELECT
+      n.nspname as function_schema,
+      p.proname as function_name,
+      l.lanname as function_language,
+      (case when l.lanname = 'internal' then p.prosrc
+      else pg_get_functiondef(p.oid)
+      end) as definition,
+      pg_get_function_arguments(p.oid) as function_arguments,
+      t.typname as return_type
+    FROM pg_proc p
+    LEET JOIn pg_namespace n on p.pronamespace = n.oid
+    LEFT JOIN pg_language l on p.prolang = l.oid
+    LEFT JOIN pg_type t on t.oid = p.prorettype
+    WHERE n.nspname not in ('pg_catalog', 'information_schema')
+    ORDER BY function_schema, function_name;
+  #+end_src
+* Cancel query                                                          :src:
+  #+BEGIN_SRC sql
+  SELECT pg_cancel_backend(15717);
+  #+END_SRC
+* Drop connection                                                       :src:
+  #+BEGIN_SRC sql
+    SELECT pg_terminate_backend(pg_stat_activity.pid)
+   FROM pg_stat_activity
+    WHERE pg_stat_activity.datname = '${1:DB_NAME}'
+      AND pid <> pg_backend_pid();
+  #+END_SRC
+* Check the disk usage for each table                                   :src:
+  #+NAME: disk-usage-for-table
+  #+BEGIN_SRC sql
+    SELECT
+       pg_size_pretty(total_bytes) AS total,
+       pg_size_pretty(index_bytes) AS INDEX,
+       pg_size_pretty(toast_bytes) AS toast,
+       pg_size_pretty(table_bytes) AS TABLE
+    FROM (
+      SELECT *, total_bytes-index_bytes-COALESCE(toast_bytes,0) AS table_bytes FROM (
+          SELECT c.oid,nspname AS table_schema, relname AS TABLE_NAME
+                  , c.reltuples AS row_estimate
+                  , pg_total_relation_size(c.oid) AS total_bytes
+                  , pg_indexes_size(c.oid) AS index_bytes
+                  , pg_total_relation_size(reltoastrelid) AS toast_bytes
+              FROM pg_class c
+              LEFT JOIN pg_namespace n ON n.oid = c.relnamespace
+              WHERE relkind = 'r'
+      ) a
+      ORDER BY total_bytes DESC
+    ) a;
+  #+END_SRC
+* Check the disk usage and hit rate for each index                      :src:
+  #+NAME: disk-usage-for-index
+  #+BEGIN_SRC sql
+    SELECT
+      schemaname || '.' || relname AS table,
+      indexrelname AS index,
+      pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size,
+      idx_scan as index_scans
+    FROM pg_stat_user_indexes ui
+    JOIN pg_index i ON ui.indexrelid = i.indexrelid
+    WHERE NOT indisunique AND idx_scan < 50 AND pg_relation_size(relid) > 5 * 8192
+    ORDER BY pg_relation_size(i.indexrelid) / nullif(idx_scan, 0) DESC NULLS FIRST,
+    pg_relation_size(i.indexrelid) DESC;
+  #+END_SRC
+* Clone database in the same instance                                   :src:
+  #+BEGIN_SRC sql
+    CREATE DATABASE "${1:NEW_DB}" WITH TEMPLATE "${2:EXISTING_DB}";
+  #+END_SRC
+* Return rows as jsonb                                                  :src:
+  #+begin_src sql
+    SELECT JSONB_AGG(ROW_TO_JSON(rows))  FROM (SELECT * FROM $1) AS rows;
+  #+end_src
+* Check source query for view                                           :src:
+  #+NAME: mat-source
+  #+BEGIN_SRC sql
+    SELECT pg_get_viewdef('${1:VIEW}');
+  #+END_SRC

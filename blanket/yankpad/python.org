@@ -1,0 +1,22 @@
+* Unit test                                                             :src:
+  #+begin_src python
+    import unittest
+    from picnic.db_models import db, $4
+    from picnic.${1:PACKAGE}.${2:MODULE} import ${3:FUNCTION}
+
+    def wipe_db():
+        with db.session_scope() as session:
+            for model in [${4:MODELS_TO_DELETE}]:
+                session.query(model).delete(synchronize_session=False)
+
+
+    class Test${5:NAME}(unittest.TestCase):
+        def setUp(self):
+            wipe_db()
+
+        def tearDown(self):
+            wipe_db()
+
+        def test_$3(self):
+            ${6:self.assertEqual(1, 1)}
+  #+end_src

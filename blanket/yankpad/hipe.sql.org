@@ -1,0 +1,463 @@
+* Generate concept id using uuidv5                                      :src:
+  #+NAME: concept-id
+  #+BEGIN_SRC sql
+    SELECT CAST(uuid_generate_v5(uuid_nil(), 'snomed_ct_' || '${1:OMOP_CONCEPT_ID}') AS VARCHAR)
+  #+END_SRC
+
+* List all possible units used by RxNorm                                :src:
+  #+NAME: all-rxnorm-units
+  #+BEGIN_SRC sql
+    WITH temp AS (
+      SELECT atv, TRIM(BOTH FROM REGEXP_REPLACE(atv, '([\.\d]+|\(.+\))', '', 'g')) AS unit_str FROM rxnorm20180205.rxnsat 
+      WHERE sab = 'RXNORM' AND atn = 'RXN_AVAILABLE_STRENGTH'
+    ), temp2 AS (
+      SELECT atv, TRIM(BOTH FROM regexp_split_to_table(unit_str, ' / ')) AS unit FROM temp
+    )
+    SELECT unit FROM temp2 GROUP BY unit;
+  #+END_SRC
+
+* Check if role level security is enabled                               :src:
+  #+NAME: table-rls
+  #+BEGIN_SRC sql
+    SELECT relname, relrowsecurity, relforcerowsecurity
+    FROM pg_class
+    WHERE oid = 'visits'::regclass;
+  #+END_SRC
+
+* List trial runs                                                       :src:
+  #+NAME: trial-runs
+  #+BEGIN_SRC sql
+    SELECT cstt.name, trr.id, tr.* FROM trial_runs trr
+    JOIN trials tr ON tr.id = trr.trial_id
+    JOIN custom_structuring_concept_groups cscg ON cscg.id = tr.custom_structuring_concept_group_id
+    JOIN custom_structuring_task_types cstt ON cstt.id = cscg.custom_structuring_task_type_id
+    JOIN programs pr ON pr.id = cstt.program_id
+    WHERE pr.name = '$1'
+  #+END_SRC
+* List global labelling concepts                                        :src:
+  #+NAME: global-labelling-concepts
+  #+begin_src sql
+    SELECT distinct glc.concept_id FROM global_labelling_concepts glc
+    JOIN custom_structuring_concept_groups cscg ON cscg.id = glc.custom_structuring_concept_group_id
+    JOIN custom_structuring_task_types cstt ON cstt.id = cscg.custom_structuring_task_type_id
+    JOIN programs pr ON pr.id = cstt.program_id
+    WHERE pr.name = $1
+  #+end_src
+* List empty excerpts by task ID                                        :src:
+  #+name: empty-excerpts-by-task-id
+  #+begin_src sql
+        WITH excerpt_types AS (
+          SELECT id, record_id, jsonb_array_elements_text(data->'excerptTypes') AS excerpt_type FROM tasks
+          WHERE id = '5ea44e3c-1cab-4f58-bd89-0c6f26a6c9d6'
+        )
+        SELECT e.id, e.position, e.type FROM excerpts e
+        JOIN pdf_files pdf ON pdf.id = e.file_id
+        JOIN (SELECT id, record_id, ARRAY_AGG(excerpt_type::enum_excerpts_type) excerpt_types FROM excerpt_types GROUP BY id, record_id) et ON et.record_id = e.file_id
+        WHERE
+          e.type = ANY(et.excerpt_types)
+          AND (e.is_duplicate IS NULL OR e.is_duplicate IS FALSE)
+          AND NOT EXISTS (SELECT 1 FROM entity_excerpts ee WHERE e.id = ee.excerpt_id)
+          AND NOT EXISTS (SELECT 1 FROM fields f WHERE e.id = f.excerpt_id)
+        ORDER BY position
+  #+end_src
+* List unconfirmed outlier visit items                                  :src:
+  #+name: unconfirmed-outlier-visit-items
+  #+begin_src sql
+    SELECT vi.id, vi.visit_id, v.start_date, f_name.word_group_id, pg.page_number, c.concept_name, f_value.value FROM visit_items vi
+    JOIN entity_excerpts ee ON vi.id = ee.entity_id
+    JOIN excerpts e ON ee.excerpt_id = e.id
+    JOIN field_groups fg ON vi.id = fg.visit_item_id
+    LEFT JOIN visits v ON vi.visit_id = v.id
+    LEFT JOIN fields f_name ON (fg.id = f_name.field_group_id AND f_name.field_type LIKE '%__NAME')
+    LEFT JOIN vocab.concepts c ON f_name.value->'concept'->>'id' = c.id
+    LEFT JOIN fields f_value ON (fg.id = f_value.field_group_id AND f_value.field_type LIKE '%__VALUE')
+    LEFT JOIN pdf_pages pg ON f_name.pdf_page_id = pg.id
+    WHERE e.file_id = (SELECT record_id FROM tasks WHERE id = '$1')
+      AND e.type = 'VISIT_ITEM__LAB'
+      AND e.is_duplicate IS NOT TRUE
+      AND e.favored_excerpt_excerpt_id IS NULL
+      AND fg.outlier_confirmed_at IS NULL
+      AND fg.predicted_outlier_reason IS NOT NULL
+      AND vi.is_published IS TRUE
+  #+end_src
+* List unpublished visit items for standard                             :src:
+  #+name: unpublished-visit-items-for-standard
+  #+begin_src sql
+
+    SELECT
+      vi.id,
+      vi.visit_id
+    FROM visit_items vi
+    JOIN entity_excerpts ee ON vi.id = ee.entity_id
+    JOIN excerpts e ON ee.excerpt_id = e.id
+    WHERE e.file_id = '0a4747c1-caf0-41db-accd-82109719f0b2'
+      -- lab
+      --AND e.type IN ('VISIT_ITEM__LAB', 'VISIT_ITEM__VITAL_SIGN')
+      -- non labs  VISIT_ITEM__ASSESSMENT: null,
+      AND e.type IN (
+        'VISIT_ITEM__ASSESSMENT',
+        'VISIT_ITEM__PROBLEM',
+        'VISIT_ITEM__DOCTOR_NOTE',
+        'VISIT_ITEM__DRUG',
+        'VISIT_ITEM__PROBLEM',
+        'VISIT_ITEM__VACCINE'
+      )
+      AND (e.is_duplicate IS NULL OR e.is_duplicate IS FALSE)
+      AND e.favor_excerpt_excerpt_id IS NUL
+      AND e.trial_run_id IS NULL
+      AND (vi.is_published IS NULL OR vi.is_published IS FALSE)
+  #+end_src
+
+* List unpublished visit items for custom structuring                   :src:
+  #+begin_src sql
+    SELECT pg.page_number AS "pageNumber"
+    FROM
+      fields f
+      JOIN field_groups fg ON fg.id = f.field_group_id
+      JOIN pdf_pages pg ON pg.id = f.pdf_page_id
+      JOIN visit_items vi ON vi.id = fg.visit_item_id
+      JOIN global_labelling_concepts glc ON glc.concept_id = f.value->'concept'->>'id'
+      JOIN tasks t ON pg.pdf_file_id = t.record_id
+    WHERE
+      f.trial_run_id = t.trial_run_id
+      AND glc.custom_structuring_concept_group_id = t.custom_structuring_concept_group_id
+      AND vi.published_at IS NULL
+      AND vi.trial_run_published_at IS NULL
+      AND t.id = '$1'
+    ORDER BY pg.page_number ASC
+    LIMIT 1
+  #+end_src
+* List uncorrected fields in excerpts                                   :src:
+  #+begin_src sql
+    SELECT DISTINCT ON (f.id) 
+      f.id as field_id,
+      e.id as excerpt_id,
+      e.position as excerpt_position,
+      f.field_type, 
+      c.concept_name,
+      f.value,
+      f.trial_run_id, 
+      f.word_group_id,
+      pg.page_number 
+    FROM excerpts e
+    LEFT JOIN entity_excerpts ee ON e.id = ee.excerpt_id
+    LEFT JOIN fields f ON e.id = f.excerpt_id
+    LEFT JOIN vocab.concepts c ON f.value->'concept'->>'id' = c.id
+    LEFT JOIN pdf_pages pg ON f.pdf_page_id = pg.id
+    WHERE e.file_id = '$1'
+      AND e.type IN ('VISIT_ITEM__LAB', 'VISIT_ITEM__VITAL_SIGN')
+      AND (e.is_duplicate IS NULL OR e.is_duplicate IS FALSE)
+      AND e.favored_excerpt_excerpt_id IS NULL
+      AND f.corrected_at IS NULL
+  #+end_src
+* List custom structuring field names from graduated trials             :src:
+  #+begin_src sql
+    SELECT
+      pr.name,
+      field_name,
+      field_type,
+      ARRAY_AGG(DISTINCT c.omop_domain_id)
+    FROM global_labelling_field_types glft
+    JOIN global_labelling_field_type_groups glft_g ON glft.global_labelling_field_type_group_id = glft_g.id
+    JOIN global_labelling_concepts glc ON glft_g.id = glc.global_labelling_field_type_group_id
+    JOIN vocab.concepts c ON glc.concept_id = c.id
+    JOIN custom_structuring_concept_groups cscg ON cscg.id = glc.custom_structuring_concept_group_id
+    JOIN custom_structuring_task_types cstt ON cstt.id = cscg.custom_structuring_task_type_id
+    JOIN trials tr ON cscg.id = tr.custom_structuring_concept_group_id
+    JOIN programs pr ON pr.id = cstt.program_id
+    WHERE tr.graduated_at IS NOT NULL
+    GROUP BY pr.id, field_name, field_type
+  #+end_src
+* Return function definition                                            :src:
+  #+begin_src sql
+    select pg_get_functiondef(oid)
+    from pg_proc
+    where proname = '$1';
+  #+end_src
+* Create trial and trial runs for excerpt task                          :src:
+  #+name: create-trial-for-excerpt-task
+  #+begin_src sql
+    INSERT INTO trials (id, task_types, max_record_portion, created_at, updated_at)
+    VALUES (
+      '23640e76-bc88-4c5c-9137-75cf65e80ee2',
+      JSONB('[{"taskType": "PROCESS_EXCERPTS"}, {"taskType": "QUALITY_CHECK_OTHER_EXCERPTS"}]'),
+      0,
+      NOW(),
+      NOW()
+    )
+    RETURNING *;
+  #+end_src
+
+  UPDATE trials SET max_portion = 0.05 WHERE id = '23640e76-bc88-4c5c-9137-75cf65e80ee2';
+
+  #+name: create-trial-runs-for-excerpt-task
+  #+begin_src sql
+    INSERT INTO trial_runs (id, trial_id, created_at, updated_at)
+    VALUES (gen_random_uuid(), '23640e76-bc88-4c5c-9137-75cf65e80ee2', NOW(), NOW());
+  #+end_src
+* Clear trial data                                                      :src:
+  #+name: clear-trial-data
+  #+begin_src sql
+    BEGIN;
+    WITH trial_run_ids AS (
+      SELECT id FROM trial_runs WHERE trial_id = '23640e76-bc88-4c5c-9137-75cf65e80ee2'
+    ), wg AS (
+      SELECT wg.id FROM word_groups wg
+      JOIN trial_run_ids trr ON wg.trial_run_id = trr.id
+    ), word_group_word_delete AS (
+      DELETE FROM word_group_words WHERE word_group_id IN (SELECT id FROM wg)
+    ), word_group_delete AS (
+      DELETE FROM word_groups WHERE id IN (SELECT id FROM wg)
+    ), field_delete AS (
+      DELETE FROM fields f USING trial_run_ids trr WHERE f.trial_run_id = trr.id
+    ), field_group_delete AS (
+      DELETE FROM field_groups fg USING trial_run_ids trr WHERE fg.trial_run_id = trr.id
+    ), condition_delete AS (
+      DELETE FROM conditions vi USING trial_run_ids trr WHERE vi.trial_run_id = trr.id
+    ), drug_delete AS (
+      DELETE FROM drugs vi USING trial_run_ids trr WHERE vi.trial_run_id = trr.id
+    ), measurement_delete AS (
+      DELETE FROM measurements vi USING trial_run_ids trr WHERE vi.trial_run_id = trr.id
+    ), note_delete AS (
+      DELETE FROM notes vi USING trial_run_ids trr WHERE vi.trial_run_id = trr.id
+    ), v AS (
+      SELECT v.id FROM visits v
+      JOIN trial_run_ids trr ON v.trial_run_id = trr.id
+    ), visit_provider_delete AS (
+      DELETE FROM visit_providers WHERE visit_id IN (SELECT id FROM v)
+    ), visit_care_site_delete AS (
+      DELETE FROM visit_care_sites WHERE visit_id IN (SELECT id FROM v)
+    ), visit_delete AS (
+      DELETE FROM visits v USING trial_run_ids trr WHERE v.trial_run_id = trr.id
+    )
+    SELECT true;
+    COMMIT;
+  #+end_src
+* Delete duplicates                                                     :src:
+  #+begin_src sql
+    WITH r AS (
+      SELECT id, row_number() OVER w as r_number
+      FROM user_named_conditions
+      WINDOW w AS (
+        PARTITION BY user_id, named_condition_id
+        ORDER BY id
+      )
+    )
+    DELETE FROM user_named_conditions
+    WHERE id IN (SELECT id FROM r WHERE r.r_number > 1);
+  #+end_src
+* List roles for pg user                                                :src:
+  #+begin_src sql
+    WITH RECURSIVE cte AS (
+       SELECT oid FROM pg_roles WHERE rolname = 'maintenance'
+
+       UNION ALL
+       SELECT m.roleid
+       FROM   cte
+       JOIN   pg_auth_members m ON m.member = cte.oid
+       )
+    SELECT oid, oid::regrole::text AS rolename FROM cte;  -- oid & name
+  #+end_src
+                                                                                                                                                                                                                                                                                                                                      #+end_src
+* Disable autovacuum                                                    :src:
+  #+begin_src sql
+    ALTER TABLE measurements SET (autovacuum_enabled = true);
+    ALTER TABLE drugs SET (autovacuum_enabled = true);
+    ALTER TABLE demographic_mentions SET (autovacuum_enabled = true);
+    ALTER TABLE forward_correction_field_groups SET (autovacuum_enabled = true);
+    ALTER TABLE program_memberships SET (autovacuum_enabled = true);
+    ALTER TABLE analytics.salarium_timesheet_entries SET (autovacuum_enabled = true);
+  #+end_src
+* List user defined functions                                           :src:
+  #+begin_src sql
+    select n.nspname as function_schema,
+           p.proname as function_name,
+           l.lanname as function_language,
+           case when l.lanname = 'internal' then p.prosrc
+                else pg_get_functiondef(p.oid)
+                end as definition,
+           pg_get_function_arguments(p.oid) as function_arguments,
+           t.typname as return_type
+    from pg_proc p
+    left join pg_namespace n on p.pronamespace = n.oid
+    left join pg_language l on p.prolang = l.oid
+    left join pg_type t on t.oid = p.prorettype
+    where n.nspname not in ('pg_catalog', 'information_schema')
+    order by function_schema,
+             function_name;
+  #+end_src
+* Cancel duplicate QC tasks                                             :src:
+  #+begin_src sql
+    WITH tmp AS (
+      SELECT
+        t.id,
+        t.complete_date,
+        t.cancel_date,
+        t.record_id,
+        t.trial_run_id,
+        row_number() OVER w as rnum
+      FROM tasks t
+      WHERE t.task_type = 'QUALITY_CHECK_LABS'
+      WINDOW w AS (
+        PARTITION BY record_id, trial_run_id
+        ORDER BY record_id, complete_date, created_at
+      )
+    )
+    UPDATE tasks
+    SET cancel_date = NOW()
+    WHERE id IN (
+      SELECT tmp.id FROM tmp
+      JOIN tmp t0 ON (tmp.record_id = t0.record_id AND t0.rnum = 1)
+      WHERE tmp.rnum > 1
+      AND tmp.complete_date IS  NULL
+    );
+  #+end_src
+* Delete duplicate pdf pages                                            :src:
+  #+begin_src sql
+    WITH tmp AS (
+      SELECT id, row_number() OVER w as r_number
+      FROM pdf_pages
+      WHERE pdf_file_id IN (
+        SELECT record_id FROM tasks
+        WHERE id IN (
+          $1
+        )
+      )
+      WINDOW w AS (
+        PARTITION BY pdf_file_id, page_number
+        ORDER BY id
+      )
+    )
+    DELETE FROM pdf_pages
+    WHERE id IN (SELECT id FROM tmp WHERE tmp.r_number > 1);
+  #+end_src
+* Cleanup dangling fields without field_group_fields                    :src:
+  #+begin_src sql
+    WITH dangling_fields AS (
+      SELECT f.id AS field_id
+      FROM fields f
+      LEFT JOIN field_group_fields fgf ON f.id = fgf.field_id
+      LEFT JOIN documents doc ON f.id = doc.date_field_id
+      WHERE pdf_page_id IN (
+        SELECT id FROM pdf_pages
+        WHERE pdf_file_id IN (
+          SELECT record_id
+          FROM tasks
+          WHERE id IN ('b50c32e6-34e5-486e-8265-87173e0755b2')
+        )
+      )
+      AND fgf.id IS NULL
+      ANd doc.id IS NULL
+    ), deleted_fields AS (
+       DELETE FROM fields
+       USING dangling_fields
+       WHERE id = dangling_fields.field_id
+       RETURNING id, field_type, field_group_id
+    ), deleted_field_groups AS (
+       DELETE FROM field_groups fg
+       USING deleted_fields
+       WHERE fg.id = deleted_fields.field_group_id 
+         AND NOT EXISTS (SELECT 1 FROM fields WHERE field_group_id = fg.id AND id != deleted_fields.id)
+       RETURNING fg.id, visit_item_id
+    ), deleted_visit_items AS (
+       DELETE FROM visit_items vi
+       USING deleted_field_groups
+       WHERE vi.id = deleted_field_groups.visit_item_id
+         AND NOT EXISTS (SELECT 1 FROM field_groups WHERE visit_item_id = vi.id)
+       RETURNING vi.id, visit_item_type
+    )
+    SELECT 
+      f.id AS deleted_field_id,
+      f.field_type AS deleted_field_type,
+      fg.id AS deleted_field_group_id,
+      vi.id AS deleted_visit_item_id,
+      vi.visit_item_type
+    FROM deleted_fields f
+    LEFT JOIN deleted_field_groups fg ON f.field_group_id = fg.id
+    LEFT JOIN deleted_visit_items vi ON fg.visit_item_id = vi.id;
+  #+end_src
+* Insert Picnic concept                                                 :src:
+  #+begin_src sql
+    INSERT INTO local_concepts (
+      id,
+      concept_name,
+      concept_code,
+      omop_domain_id,
+      omop_vocabulary_id,
+      omop_concept_class_id,
+      valid_start_date,
+      valid_end_date,
+      created_at,
+      updated_at,
+      is_pending_training,
+      domain_id,
+      vocabulary_id,
+      concept_class_id,
+      change_set_id
+    )
+    VALUES (
+      gen_random_uuid(),
+      ${1:CONCEPT_NAME},
+      ${2:CONCEPT_CODE},
+      ${3:DOMAIN},
+      ${4:VOCABULARY},
+      ${5:CONCEPT_CLASS},
+      NOW(),
+      '2100-01-01',
+      NOW(),
+      NOW(),
+      true,
+      (SELECT id FROM vocab.domains WHERE domain_id = ${3:DOMAIN}),
+      (SELECT id FROM vocab.vocabularies WHERE vocabulary_id = ${4:VOCABULARY}),
+      (SELECT id FROM vocab.concept_classes WHERE concept_class_id = ${5:CONCEPT_CLASS}),
+      ${6:CHANGE_SET_ID}
+    );
+  #+end_src
+  Then, you need to upsert it elasticsearch for the search to work
+  #+begin_src js
+    const AbstractConcept = require('../models/helpers/models/abstract_concept');
+    const models = require('./app/sequelize_models')._models;
+    const concept = await models.Concept.findByPk($1);
+    await abstract.upsertConceptInElasticsearch(models.sequelize.picnicConfigs, concept);
+  #+end_src
+* Count fields by field type in a task                                  :src:
+  #+begin_src sql
+    SELECT
+       f.field_type,
+       COUNT(DISTINCT f.id)
+    FROM field_groups fg
+    JOIN fields f ON fg.id = f.field_group_id
+    JOIN visit_items vi ON fg.visit_item_id = vi.id
+    JOIN entity_excerpts ee ON vi.id = ee.entity_id
+    JOIN excerpts e ON ee.excerpt_id = e.id
+    JOIN tasks t ON e.file_id = t.record_id
+    WHERE t.id = '${1:TASK_ID}'
+      AND e.type::TEXT IN (SELECT * FROM jsonb_array_elements_text(data->'excerptTypes'))
+    GROUP BY field_type;
+  #+end_src
+* Excerpt cannot be deleted because of fk on fields                     :src:
+  #+begin_src sql
+    SELECT vi.id, fg.id FROM fields f
+    JOIN field_group_fields fgf ON f.field_group_id = fgf.field_group_id
+    JOIN field_groups fg ON fgf.field_group_id = fg.id
+    LEFT JOIN visit_items vi ON fg.visit_item_id = vi.id
+    WHERE f.excerpt_id = '$1';
+  #+end_src
+* Compare fields between two visit items                                :src:
+  #+begin_src sql
+    SELECT
+      vi.visit_id,
+      vi.id AS visit_item_id,
+      fg.id AS field_group_id,
+      fg.corrected_at,
+      f.updated_at,
+      f.field_type,
+      f.value,
+      f.input_value
+    FROM visit_items vi
+    JOIN field_groups fg ON vi.id = fg.visit_item_id
+    JOIN field_group_fields fgf ON fg.id = fgf.field_group_id
+    JOIN fields f ON fgf.field_id = f.id
+    WHERE vi.id in ('${1:VISIT_ITEM_1_ID}', '${2:VISIT_ITEM_2_ID}')
+    ORDER BY f.field_type;
+  #+end_src

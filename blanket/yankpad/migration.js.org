@@ -1,0 +1,84 @@
+* Add column                                                            :src:
+  #+begin_src js
+    const ${1:addColumn} = {
+      getColumns: DataTypes => ({
+        $2: {
+          $3: {
+            comment: 'ID of the $3',
+            type: DataTypes.UUID,
+            references: {
+              model: $4,
+              key: 'id'
+            }
+          }
+        }
+      }),
+      async up(queryInterface, Sequelize, transaction) {
+        await helpers.addColumns(
+          $1.getColumns(Sequelize),
+          queryInterface,
+          {transaction}
+        );
+      },
+      async down(queryInterface, Sequelize, transaction) {
+        await helpers.removeColumns(
+          $1.getColumns(Sequelize),
+          queryInterface,
+          {transaction}
+        );
+      }
+    };
+  #+end_src
+* Add table                                                             :src:
+  #+begin_src js
+    const ${1:addTable} = {
+      getTables(Sequelize) {
+        return {
+          $2: {
+            id: {
+              comment: 'ID of the $2',
+              type: Sequelize.UUID,
+              allowNull: false
+            },
+            $4: {
+              comment: 'ID of the $4 associated with $2',
+              type: Sequelize.STRING,
+              references: {
+                model: $5,
+                key: 'id'
+              }
+            },
+            created_at: {
+              comment: 'Timestamp when $2 is created.',
+              type: Sequelize.DATE,
+              allowNull: false
+            },
+            updated_at: {
+              comment: 'Timestamp when $2 is updated.',
+              type: Sequelize.DATE,
+              allowNull: false
+            }
+          }
+        };
+      },
+      async up(queryInterface, Sequelize, transaction) {
+        const tables = $1.getTables(Sequelize);
+        await helpers.addTables(tables, queryInterface, {transaction});
+      },
+      async down(queryInterface, Sequelize, transaction) {
+        const tables = $1.getTables(Sequelize);
+        await helpers.dropTables(tables, queryInterface, {transaction});
+      }
+    };
+
+  #+end_src
+* Add query                                                             :src:
+  #+begin_src js
+    return queryInterface.sequelize.query($0, {transaction});
+  #+end_src
+* Add transaction                                                       :src:
+  #+begin_src js
+    return queryInterface.sequelize.transaction(transaction => {
+      $0
+    });
+  #+end_src
