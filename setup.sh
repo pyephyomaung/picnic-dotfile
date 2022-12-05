@@ -1,12 +1,13 @@
 #!/bin/bash
 
-brew install emacs the_silver_searcher cmake gcc@5
+# install system dependencies for emacs
+brew install emacs the_silver_searcher cmake gcc@5 libvterm
 sudo apt install -y libvterm-dev
 
-# setup lsp dependencies
+# install lsp dependencies
 npm i -g typescript typescript-language-server
 
-# emacs
+# install emacs config
 git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
 mkdir -p ~/.local/share/fonts
 cp /workspace/.emacs.d/*.ttf ~/.local/share/fonts
