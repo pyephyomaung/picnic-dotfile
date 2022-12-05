@@ -6,8 +6,6 @@
 Blanket is an interface to the Picnic development commands, implemented
 as an Emacs package.
 
-[[Blanket][https://gitlab.com/pyephyomaung/blanket/-/wikis/uploads/0edf82fbc94b06639dd0f3cd6a97af73/blanket.jpg]]
-
 * Why Blanket?
   Either it is a romantic picnic or family picnic, we need something
   to sit on and be productive and picnic blacket is the best option
@@ -20,19 +18,9 @@ as an Emacs package.
   - [[https://github.com/Kungsgeten/yankpad][yankpad]] [Optional for snippets]
 
 * Getting started
-  First, you would need to get your user name and access token from Gitlab settings. Then, set environment variables (eg. in ~/.bash_profile for OSX)
-  #+begin_src bash
-    export GITLAB_TOKEN=<YOUR_TOKEN>
-    export GITLAB_USERNAME=<YOUR_USER>
-  #+end_src
-
-  It is not available on MELPA so you would have to do something like
-  this in your Emacs init file:
-
+  Load [[file:blanket.el][blanket.el]] in your .emacs file.
   #+begin_src elisp
-  (exec-path-from-shell-copy-env "GITLAB_TOKEN")
-  (exec-path-from-shell-copy-env "GITLAB_USERNAME")
-  (load-file "<PATH_TO_THIS_REPO>/blanket.el")
+    (load-file "<path-to-dotfiles/blanket/blanket.el")
   #+end_src
 
   To try Blanket, just call ~M-x~ ~blanket~. This will show the top
@@ -40,20 +28,14 @@ as an Emacs package.
   blanket menu if you are using dvorak keyboard:
 
   #+begin_src elisp
-  (global-set-key (kbd "M-o") 'blanket)
+    (global-set-key (kbd "M-o") 'blanket)
   #+end_src
 
-  This is what the blanket menu looks like:
-  #+html: <p align="center"><img src="https://gitlab.picnichealth.com/team/utilities/-/wikis/uploads/50055ce70998f1c0088f2135a1cf7db8/Screen_Shot_2020-09-26_at_2.08.21_PM.png" width="800px"/></p>
-
-** Gitlab issues
-  From the blanket menu, you can quickly list the open issues in
-  Gitlab you are working on. The issues are grouped by sprint labels
-  and sorted by priority labels inside each sprint label.
-  #+html: <p align="center"><img src="https://gitlab.picnichealth.com/team/utilities/-/wikis/uploads/82ee6da19d0d8f6c7e000d12f3434e7b/Screen_Recording_2020-09-26_at_3.07.44_PM.mov.gif" width="700px"/></p>
-
 ** Migration
-  From the blanket menu, you can quickly create a migration and 
-  then apply or undo it. To do this, go to the picnic root folder 
-  first and run it like this:
-  #+html: <p align="center"><img src="https://gitlab.picnichealth.com/team/utilities/-/wikis/uploads/6dd43c3e383aae8c03ccbb5e126f08dd/Screen_Recording_2020-09-26_at_3.37.40_PM.mov.gif" width="700px"/></p>
+  Quickly create a migration and then apply or undo it from the
+  blanket menu.
+
+  
+** Testing
+  Quickly run a unit test by going into the test file and run it from
+  the blanket menu.

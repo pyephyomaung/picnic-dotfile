@@ -271,9 +271,6 @@
     ("e" "Edit snippets" blanket/find-yankpad-file)
   ])
 
-;; load gitlab
-(load (concat (file-name-directory (or load-file-name buffer-file-name)) "gitlab.el"))
-
 
 (defun blanket/read-logs-by-change-set-id ()
   "Read Stackdriver logs by changeSetId"
@@ -340,7 +337,6 @@
     "Picnista Fiesta! glhf!\n"
     [
       "Crafting"
-      ("g" "Gitlab issues" blanket/gitlab-show-issues)
       ("s" "Snippets" blanket/snippets)
       ("d" "Fix Lint diff" blanket/fix-lint-diff)
       ("b" "Basket snapshots" blanket/basket-snapshot)
