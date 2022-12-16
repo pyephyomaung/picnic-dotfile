@@ -16,7 +16,3 @@ ln -s /home/gitpod/.dotfiles/.emacs /home/gitpod/.emacs
 
 mkdir -p /workspace/.emacs.d
 ln -s /workspace/.emacs.d /home/gitpod/.emacs.d
-
-# install vterm dependency
-brew install cmake gcc@5 libvterm
-sudo apt install -y libvterm-dev
