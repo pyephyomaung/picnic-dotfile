@@ -15,5 +15,8 @@ ln -s /workspace/.emacs.d /home/gitpod/.emacs.d
 npm i -g typescript typescript-language-server
 pip3 install 'python-lsp-server[all]' pylsp-mypy
 
+# update brew
+brew update
+
 # install system dependencies for emacs
 brew install emacs the_silver_searcher
