@@ -19,4 +19,4 @@ pip3 install 'python-lsp-server[all]' pylsp-mypy
 brew update
 
 # install system dependencies for emacs
-brew install emacs the_silver_searcher
+HOMEBREW_NO_AUTO_UPDATE=1 brew install emacs the_silver_searcher
