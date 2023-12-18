@@ -17,4 +17,4 @@ pip3 install 'python-lsp-server[all]' pylsp-mypy
 
 # install emacs
 sudo add-apt-repository ppa:ubuntuhandbook1/emacs -y
-sudo apt install emacs-nox -y
+sudo apt install emacs-nox ncurses-term -y
