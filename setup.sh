@@ -18,6 +18,10 @@ pip3 install 'python-lsp-server[all]' pylsp-mypy
 # skip mail questions during postfix in apt install
 export DEBIAN_FRONTEND=noninteractive
 
-# install emacs
-sudo add-apt-repository ppa:ubuntuhandbook1/emacs -y
-sudo apt install emacs-nox ncurses-term -y
+if [ -n "$CODER" ]; then
+  sudo apt install emacs -y
+else
+  # install emacs
+  sudo add-apt-repository ppa:ubuntuhandbook1/emacs -y
+  sudo apt install emacs-nox ncurses-term -y
+fi
