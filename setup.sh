@@ -6,7 +6,7 @@ if [ -n "$CODER" ]; then
     cp /home/coder/.emacs.d/*.ttf ~/.local/share/fonts
     fc-cache -f -v
 
-    echo '(load-file "/workspace/.emacs.d/init.el")' > /home/coder/.emacs
+    echo '(load-file "/home/coder/.emacs.d/init.el")' > /home/coder/.emacs
     echo '(load-file "/home/coder/.config/coderv2/dotfiles/blanket/blanket.el")' >> /home/coder/.emacs
 
     # install lsp dependencies
