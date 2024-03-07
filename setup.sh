@@ -13,8 +13,8 @@ if [ -n "$CODER" ]; then
     npm i -g typescript typescript-language-server
     pip3 install 'python-lsp-server[all]' pylsp-mypy
 
-    sudo apt install emacs ncurses-term ripgrep uuid-runtime -y
-    export TERM=xterm-direct
+    sudo apt install ncurses-term ripgrep uuid-runtime -y
+    echo "export TERM=xterm-direct" >> ~/.bashrc
 else
     # install emacs config
     git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
