@@ -154,10 +154,7 @@
          (test-file (replace-regexp-in-string
                       ".*\/packages"
                       "packages"
-                      (read-file-name "Select test file: "
-                        (cond
-                          ((string-match blanket-root (buffer-file-name)) (buffer-file-name))
-                          (t (concat blanket-root "packages/app/test"))))))
+                      (read-file-name "Select test file: " (buffer-file-name))))
           (env "test"))
     (blanket/dev-run-in-app
       env
