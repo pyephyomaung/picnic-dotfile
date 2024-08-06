@@ -147,6 +147,12 @@
 ;; Testing ;;
 ;;;;;;;;;;;;;
 
+(defun extract-package (input)
+  "Extract <MODULE> from a string like `packages/<MODULE>/<PATH>`."
+  (if (string-match "packages/\\([^/]+\\)/" input)
+      (match-string 1 input)
+    nil))
+
 (defun blanket/dev-test-app (&optional module)
   "Test app."
   (interactive)
@@ -155,17 +161,11 @@
                       ".*\/packages"
                       "packages"
                       (read-file-name "Select test file: " (buffer-file-name))))
+          (package (extract-package test-file))
           (env "test"))
-    (blanket/dev-run-in-app
-      env
-      "/picnic"
-      (cond
-        ((string-equal module "frontend")
-          (format "yarn --cwd \"packages/app\" run test:frontend %s" test-file))
-        ((string-equal module "models")
-          (format "make test-js-models TEST_FILES=%s NODE_ENV=%s" test-file env))
-        (t
-          (format "make test-js-app TEST_FILES=%s NODE_ENV=%s" test-file env))))))
+    (blanket/dev-run-in-terminal
+      (blanket/repo-root)
+      (format "picnic test packages/%s -f %s" package test-file))))
 
 (defun blanket/dev-test-models ()
   (interactive)
