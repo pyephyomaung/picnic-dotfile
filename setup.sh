@@ -15,6 +15,9 @@ if [ -n "$CODER" ]; then
 
     sudo apt install ncurses-term ripgrep uuid-runtime -y
     echo "export TERM=xterm-direct" >> ~/.bashrc
+
+    # extract environment variable from local.env
+    export $(grep SECRET__OPENAI_API_KEY ~/picnic/infra/local/secrets/local.env | sed 's/SECRET__OPENAI_API_KEY/OPENAI_API_KEY/' | xargs)
 else
     # install emacs config
     git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
