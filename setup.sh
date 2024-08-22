@@ -14,10 +14,15 @@ if [ -n "$CODER" ]; then
     pip3 install 'python-lsp-server[all]' pylsp-mypy
 
     sudo apt install ncurses-term ripgrep uuid-runtime -y
-    echo "export TERM=xterm-direct" >> ~/.bashrc
+
+    if [ -z "${OPENAI_API_KEY}" ]; then
+        echo "export TERM=xterm-direct" >> ~/.bashrc
+    fi
 
     # extract environment variable from local.env
-    export $(grep SECRET__OPENAI_API_KEY ~/picnic/infra/local/secrets/local.env | sed 's/SECRET__OPENAI_API_KEY/OPENAI_API_KEY/' | xargs)
+    if [ -z "${OPENAI_API_KEY}" ]; then
+        echo "export $(grep SECRET__OPENAI_API_KEY ~/picnic/infra/local/secrets/local.env | sed 's/SECRET__OPENAI_API_KEY/OPENAI_API_KEY/' | xargs)" >> ~/.bashrc
+    fi
 else
     # install emacs config
     git clone https://github.com/pyephyomaung/.emacs.d.git /workspace/.emacs.d
